@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+import SEOHead from '../components/SEOHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileStickyBar from '../components/MobileStickyBar.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  keywords?: string;
+  type?: 'website' | 'article';
+  image?: string;
+  robots?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  section?: string;
+  tags?: string[];
+  breadcrumbs?: { name: string; url: string }[];
+  schema?: Record<string, any> | Record<string, any>[];
+  isNetworkContext?: boolean;
+  showFooterNetworkNotice?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  keywords,
+  type = 'website',
+  image,
+  robots,
+  publishedTime,
+  modifiedTime,
+  author,
+  section,
+  tags,
+  breadcrumbs,
+  schema,
+  isNetworkContext = false,
+  showFooterNetworkNotice = true,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="zh-CN" class="dark">
+  <head>
+    <SEOHead
+      title={title}
+      description={description}
+      canonical={canonical}
+      keywords={keywords}
+      type={type}
+      image={image}
+      robots={robots}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      author={author}
+      section={section}
+      tags={tags}
+      breadcrumbs={breadcrumbs}
+      schema={schema}
+    />
+  </head>
+  <body class="bg-[#07090e] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-950 pb-16 sm:pb-0">
+    <Header currentPath={currentPath} />
+    
+    <main class="flex-grow">
+      <slot />
+    </main>
+
+    <Footer showNetworkNotice={showFooterNetworkNotice} />
+    <MobileStickyBar isNetworkContext={isNetworkContext} />
+  </body>
+</html>

@@ -1,0 +1,139 @@
+---
+import { SITE_CONFIG } from '../lib/constants';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+
+const navItems = [
+  { name: '首页', href: '/' },
+  { name: '热门短剧', href: '/drama/' },
+  { name: 'AI短剧专区', href: '/ai-drama/' },
+  { name: 'AI创作工具', href: '/ai-tools/' },
+  { name: '网络诊断中心', href: '/network/' },
+  { name: '排障与教程', href: '/tutorials/' },
+];
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- Brand Logo -->
+    <a href="/" class="flex items-center gap-2.5 group">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
+        <svg class="w-6 h-6 fill-current text-slate-950" viewBox="0 0 24 24">
+          <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 4h16V6H4v2zm0 4h16v-2H4v2zm0 6h16v-4H4v4z" opacity="0.3"/>
+          <path d="M10 9.5l6 3.5-6 3.5v-7z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-lg md:text-xl font-black tracking-tight text-white group-hover:text-amber-400 transition-colors flex items-center gap-1.5">
+          黄果短剧
+          <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">AI+</span>
+        </span>
+        <span class="text-[10px] text-slate-400 hidden sm:block tracking-widest font-mono">HUANGGUOJU.CYOU</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden lg:flex items-center gap-1 xl:gap-2">
+      {navItems.map((item) => {
+        const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+        return (
+          <a
+            href={item.href}
+            class={`px-3 py-1.5 text-sm font-medium rounded-lg transition-all ${
+              isActive
+                ? 'text-amber-400 bg-amber-500/10 border border-amber-500/20 shadow-sm'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            {item.name}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="hidden sm:flex items-center gap-3">
+      <a
+        href="/network/"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-amber-300/90 hover:text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-lg transition-colors"
+      >
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+        网络环境检查
+      </a>
+
+      <a
+        href={SITE_CONFIG.appDownloadUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 rounded-lg shadow-md shadow-amber-500/10 transition-transform active:scale-95"
+      >
+        <span class="w-4 h-4 rounded-full bg-slate-950 flex items-center justify-center shrink-0">
+          <svg class="w-2.5 h-2.5 text-[#f59e0b]" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        下载APP
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button
+      type="button"
+      id="mobile-menu-toggle"
+      class="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+      aria-label="打开菜单"
+    >
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Dropdown Navigation -->
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-800 bg-slate-950/95 px-4 py-4 space-y-2">
+    {navItems.map((item) => (
+      <a
+        href={item.href}
+        class="block px-3 py-2 text-base font-medium rounded-lg text-slate-300 hover:text-amber-400 hover:bg-slate-900 transition-colors"
+      >
+        {item.name}
+      </a>
+    ))}
+    <div class="pt-3 border-t border-slate-800/80 flex flex-col gap-2">
+      <a
+        href="/network/"
+        class="flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-lg"
+      >
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        网络环境诊断与排障
+      </a>
+      <a
+        href={SITE_CONFIG.appDownloadUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center justify-center gap-2 py-2.5 text-sm font-bold text-slate-950 bg-amber-400 rounded-lg"
+      >
+        <span class="w-4 h-4 rounded-full bg-slate-950 flex items-center justify-center shrink-0">
+          <svg class="w-2.5 h-2.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        下载黄果短剧APP
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggleBtn = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  if (toggleBtn && menu) {
+    toggleBtn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  }
+</script>

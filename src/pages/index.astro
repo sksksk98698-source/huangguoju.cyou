@@ -1,0 +1,674 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NetworkStatusDashboard from '../components/NetworkStatusDashboard.astro';
+import { SITE_CONFIG } from '../lib/constants';
+import { DRAMAS } from '../data/dramas';
+
+const trendingDramas = DRAMAS.slice(0, 6);
+
+const networkChecks = [
+  { num: '01', title: '页面是否可以正常打开', desc: '测试网站主站与导航资源连通情况' },
+  { num: '02', title: '视频封面是否可以加载', desc: '测试图片CDN静态节点传输完整度' },
+  { num: '03', title: '播放过程中是否频繁卡顿', desc: '测试连续流媒体下行带宽与抖动表现' },
+  { num: '04', title: 'AI工具是否可以正常连接', desc: '测试海外AI生成大模型服务接口连通' },
+];
+
+const troubleCards = [
+  {
+    title: '黄果短剧打不开',
+    desc: '页面无法访问、加载超时或一直空白。',
+    href: '/tutorials/huangguoju-cant-open/',
+    icon: '🌐'
+  },
+  {
+    title: '短剧播放卡顿',
+    desc: '视频频繁缓冲、播放停止或资源加载慢。',
+    href: '/tutorials/playback-lag-solution/',
+    icon: '⏳'
+  },
+  {
+    title: 'AI工具打不开',
+    desc: 'AI剧本、AI视频、AI图片工具出现网络异常。',
+    href: '/tutorials/ai-drama-generator-cant-open/',
+    icon: '⚡'
+  },
+  {
+    title: '地区或连接异常',
+    desc: '出现 Region Not Supported、Network Error 等提示。',
+    href: '/tutorials/region-not-supported/',
+    icon: '⚠️'
+  }
+];
+
+const faqs = [
+  {
+    q: '黄果短剧打不开怎么办？',
+    a: '首先检查当前网络、DNS、浏览器和设备设置。如果其他网络环境可以正常访问，则可能与当前网络线路有关。建议查看网络诊断中心进行逐项排查。'
+  },
+  {
+    q: '黄果短剧为什么一直加载？',
+    a: '可能与当前网络质量、资源连接、浏览器缓存或线路状态有关，可以先刷新页面并更换网络测试。如果在播放高清流媒体时频繁转圈，可检查当前带宽下行与丢包率。'
+  },
+  {
+    q: '为什么部分AI工具无法使用？',
+    a: '不同AI服务可能存在网络、账户、地区和服务可用性差异，需要根据具体错误信息进行排查。例如提示“Region Not Supported”通常需要合规纯净的专线支持。'
+  },
+  {
+    q: '可以使用光速云吗？',
+    a: '如果当前网络环境存在页面无法加载、连接超时或AI工具访问异常，可以尝试使用光速云优化网络连接。光速云提供IEPL专线与多平台客户端，可改善复杂网络下的跨网传输体验。'
+  },
+  {
+    q: '光速云在哪里开通？',
+    a: '点击官网中的“使用光速云”按钮即可进入注册页面，快速开通专属加速方案。'
+  }
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="黄果短剧 - 让 AI 重塑短剧创作的无限可能"
+  description="黄果短剧（huangguoju.cyou）官方影视与AI创作平台。精选热门逆袭短剧、AIGC赛博漫剧，提供高清流畅播放与AI创作者网络环境排障支持。"
+  schema={[faqSchema]}
+>
+  <!-- ========================================== -->
+  <!-- Section II: Hero 区域融合                  -->
+  <!-- ========================================== -->
+  <section class="relative pt-6 pb-16 md:pt-10 md:pb-24 overflow-hidden">
+    <!-- Atmospheric Ambient Background using the image -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <img
+        src="/images/hero-banner.png"
+        alt=""
+        class="w-full h-full object-cover object-center opacity-30 blur-2xl scale-110"
+      />
+      <!-- Vignette and Dark Gradients to smoothly merge with theme -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#07090e]/80 via-[#07090e]/60 to-[#07090e]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_20%,rgba(245,158,11,0.15),transparent)]"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <!-- Tagline badge & Semantic H1 Header -->
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full cinema-glass border border-amber-500/20 text-xs md:text-sm font-medium text-amber-300 mb-4 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+          <span>黄果短剧 · 开启微短剧与 AIGC 视觉新纪元</span>
+        </div>
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white mb-2">
+          黄果短剧
+        </h1>
+        <p class="text-base sm:text-xl md:text-2xl font-bold gold-gradient-text tracking-wide mb-2">
+          让 AI 重塑短剧创作的无限可能
+        </p>
+        <p class="text-xs sm:text-sm md:text-base text-slate-300 font-medium tracking-wider">
+          AI短剧 · AI漫剧 · AI视频 · AI剧本 · AI创作
+        </p>
+      </div>
+
+      <!-- Main Visual Showcase (The uploaded image framed in a cinema container) -->
+      <div class="relative max-w-5xl mx-auto rounded-3xl overflow-hidden border border-amber-500/30 shadow-2xl gold-glow-lg group mb-8">
+        <img
+          src="/images/hero-banner.png"
+          alt="黄果短剧 - 用AI重塑无限可能，不同主题，不同惊喜，每次打开都有新的故事发生"
+          class="w-full h-auto object-cover block group-hover:scale-[1.01] transition-transform duration-500"
+          loading="eager"
+        />
+        <!-- Subtle bottom edge gradient -->
+        <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-5">
+        <a
+          href={SITE_CONFIG.appDownloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full sm:w-auto px-9 py-3.5 rounded-2xl bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 font-black text-base md:text-lg shadow-xl shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer"
+        >
+          <span class="w-6 h-6 rounded-full bg-slate-950 flex items-center justify-center shrink-0">
+            <svg class="w-3.5 h-3.5 text-[#f59e0b]" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+          </span>
+          <span>下载黄果短剧</span>
+        </a>
+
+        <a
+          href="#popular-dramas"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-2xl cinema-glass text-white font-bold text-base md:text-lg hover:bg-slate-800/80 hover:border-amber-500/30 transition-all flex items-center justify-center gap-2.5"
+        >
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+            <svg class="w-3.5 h-3.5 fill-current ml-0.5" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+          <span>探索精彩内容</span>
+        </a>
+      </div>
+
+      <!-- Subtle Prompt Below Buttons (Requirement Section II) -->
+      <div class="text-xs sm:text-sm text-slate-400 flex items-center justify-center gap-2">
+        <span>页面打不开或内容加载缓慢？</span>
+        <a
+          href="#network-help"
+          class="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-4 transition-colors"
+        >
+          检查网络环境
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- Section III: 新增：观看前网络准备           -->
+  <!-- ========================================== -->
+  <section id="network-help" class="scroll-mt-24 py-16 bg-slate-900/40 border-y border-white/5 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold mb-3">
+          环境自查助手
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-4">
+          观看前，先检查你的网络环境
+        </h2>
+        <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+          不同地区、运营商及网络环境可能影响页面加载、视频播放以及部分 AI 工具的连接状态。
+        </p>
+      </div>
+
+      <!-- 4 Checks Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        {networkChecks.map((item) => (
+          <div class="cinema-glass rounded-2xl p-5 border border-white/5 hover:border-amber-500/30 transition-all flex flex-col justify-between">
+            <div>
+              <div class="text-2xl font-black font-mono text-amber-400/80 mb-2">
+                {item.num}
+              </div>
+              <h3 class="text-base font-bold text-white mb-1.5">
+                {item.title}
+              </h3>
+              <p class="text-xs text-slate-400 leading-normal">
+                {item.desc}
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+              <span>状态判断</span>
+              <span class="text-emerald-400 font-medium flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                待检测
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Guidance Note & CTAs -->
+      <div class="max-w-3xl mx-auto cinema-glass rounded-2xl p-6 md:p-8 border border-amber-500/20 text-center space-y-5">
+        <p class="text-sm md:text-base text-slate-200 leading-relaxed">
+          如果以上功能都可以正常使用，无需进行任何额外设置。<br class="hidden sm:inline" />
+          如果出现：<span class="text-amber-400 font-medium">页面打不开、图片加载失败、视频一直转圈、连接超时、AI工具无法使用</span>，可以尝试优化当前网络环境。
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          <a
+            href={SITE_CONFIG.guangsuCloudUrl}
+            target={SITE_CONFIG.externalLinkAttrs.target}
+            rel={SITE_CONFIG.externalLinkAttrs.rel}
+            class="w-full sm:w-auto px-7 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm md:text-base gold-glow transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <svg class="w-5 h-5 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            使用光速云优化网络
+          </a>
+
+          <a
+            href="/network/"
+            class="w-full sm:w-auto px-6 py-3 rounded-xl cinema-glass text-slate-200 hover:text-white hover:border-slate-600 text-sm md:text-base font-medium transition-colors flex items-center justify-center gap-2"
+          >
+            查看解决教程 &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- Drama Showcase: 热门剧场                    -->
+  <!-- ========================================== -->
+  <section id="popular-dramas" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+        <div>
+          <div class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">HOT SELECTION</div>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+            热门短剧精选
+          </h2>
+        </div>
+        <a href="/drama/" class="text-sm font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1.5 transition-colors">
+          查看全部剧目
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {trendingDramas.map((drama) => (
+          <div class="group cinema-glass cinema-glass-hover rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
+            <div class={`h-48 bg-gradient-to-br ${drama.gradient} p-5 relative flex flex-col justify-between overflow-hidden`}>
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+              
+              <div class="relative z-10 flex items-center justify-between">
+                <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-amber-300 border border-white/10">
+                  {drama.category}
+                </span>
+                {drama.isAiCreated && (
+                  <span class="text-xs font-bold px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 shadow-md">
+                    AI全流程制作
+                  </span>
+                )}
+              </div>
+
+              <div class="relative z-10">
+                <span class="text-[11px] font-semibold text-amber-300/90 block mb-1">
+                  {drama.badge}
+                </span>
+                <h3 class="text-lg font-black text-white group-hover:text-amber-300 transition-colors line-clamp-1">
+                  {drama.title}
+                </h3>
+              </div>
+            </div>
+
+            <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+              <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                {drama.description}
+              </p>
+
+              <div class="flex flex-wrap gap-1.5">
+                {drama.tags.map((t) => (
+                  <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800/80 text-slate-400 border border-slate-700/50">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                <div class="text-xs text-slate-400">
+                  <span class="text-amber-400 font-bold">{drama.rating}分</span> · {drama.episodes}集全
+                </div>
+                <a
+                  href={`/drama/${drama.slug}/`}
+                  class="inline-flex items-center gap-1 text-xs font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 rounded-lg border border-amber-500/30 transition-all"
+                >
+                  立即观看 &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- Section IV: 新增：黄果短剧推荐网络方案     -->
+  <!-- ========================================== -->
+  <section class="py-16 bg-gradient-to-b from-slate-900/60 to-slate-950 border-y border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- Left: Brand introduction & copy -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold">
+            黄果短剧推荐网络方案
+          </div>
+
+          <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+            让观看和 AI 创作更顺畅
+          </h2>
+
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="text-lg font-bold text-slate-200">推荐方案：</span>
+              <span class="text-xl font-black text-amber-400 tracking-wide">光速云</span>
+            </div>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-2">
+              {['IEPL专线', 'VLESS', 'AI工具', '流媒体', '自研客户端', '多平台支持'].map((tag) => (
+                <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700/80 font-mono">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <p class="text-sm md:text-base text-slate-300 leading-relaxed">
+            在部分复杂网络环境下，黄果短剧页面、视频内容以及部分海外 AI 创作工具可能出现连接慢、加载失败或访问异常。<br />
+            如果你的本地网络无法正常使用，可以通过光速云改善连接环境。
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            <a
+              href={SITE_CONFIG.guangsuCloudUrl}
+              target={SITE_CONFIG.externalLinkAttrs.target}
+              rel={SITE_CONFIG.externalLinkAttrs.rel}
+              class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-base gold-glow transition-transform active:scale-95 shadow-xl shadow-amber-500/20 cursor-pointer"
+            >
+              <svg class="w-5 h-5 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              立即使用光速云
+            </a>
+
+            <a
+              href="/tutorials/ai-tools-network-error/"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl cinema-glass text-slate-300 hover:text-white hover:border-slate-600 text-sm font-semibold transition-colors"
+            >
+              查看配置教程 &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Network Status Dashboard -->
+        <div class="lg:col-span-6">
+          <NetworkStatusDashboard />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- Section V: 三步开始观看                     -->
+  <!-- ========================================== -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-3">
+          三步开始观看
+        </h2>
+        <p class="text-sm sm:text-base text-slate-400">
+          极简流程，随时随地开启高清AI短剧盛宴
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- STEP 01 -->
+        <div class="cinema-glass rounded-2xl p-6 border border-white/5 relative flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-md inline-block mb-4">
+              STEP 01
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">准备黄果短剧</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-6">
+              下载APP或者打开黄果短剧网页端，收藏海量剧单。
+            </p>
+          </div>
+          <a
+            href={SITE_CONFIG.appDownloadUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full py-2.5 rounded-xl bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 font-black text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-amber-500/20"
+          >
+            <span class="w-4 h-4 rounded-full bg-slate-950 flex items-center justify-center shrink-0">
+              <svg class="w-2.5 h-2.5 text-[#f59e0b]" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            下载黄果短剧
+          </a>
+        </div>
+
+        <!-- STEP 02 (with Guangsu Cloud integration) -->
+        <div class="cinema-glass rounded-2xl p-6 border border-amber-500/30 relative flex flex-col justify-between">
+          <div class="absolute -top-3 right-4 px-2 py-0.5 rounded bg-amber-500 text-slate-950 text-[10px] font-bold">
+            关键步骤
+          </div>
+          <div>
+            <div class="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-md inline-block mb-4">
+              STEP 02
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">检查网络环境</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-4">
+              如果页面、视频或AI功能无法正常加载，检查当前网络连接。
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <a
+              href="#network-help"
+              class="block w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-center text-xs font-bold transition-colors"
+            >
+              检查网络
+            </a>
+
+            <!-- Sub-conversion prompt under Step 02 -->
+            <div class="pt-2 text-center text-xs text-slate-400 flex items-center justify-center gap-1.5">
+              <span>网络异常？</span>
+              <a
+                href={SITE_CONFIG.guangsuCloudUrl}
+                target={SITE_CONFIG.externalLinkAttrs.target}
+                rel={SITE_CONFIG.externalLinkAttrs.rel}
+                class="text-amber-400 hover:text-amber-300 font-bold underline cursor-pointer"
+              >
+                【使用光速云】
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 03 -->
+        <div class="cinema-glass rounded-2xl p-6 border border-white/5 relative flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-md inline-block mb-4">
+              STEP 03
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">开始观看</h3>
+            <p class="text-sm text-slate-300 leading-relaxed mb-6">
+              网络连接正常后，返回黄果短剧选择喜欢的内容，沉浸追剧。
+            </p>
+          </div>
+          <a
+            href="/drama/"
+            class="w-full py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-center text-xs font-bold transition-colors"
+          >
+            进入热门剧场
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- Section XI: 首页新增场景卡                  -->
+  <!-- ========================================== -->
+  <section class="py-16 bg-slate-900/30 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
+          你可能遇到这些问题
+        </h2>
+        <p class="text-sm text-slate-400">
+          我们整理了常见连接与播放场景问题，助你一键恢复顺畅
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {troubleCards.map((card) => (
+          <div class="cinema-glass rounded-2xl p-5 border border-white/5 hover:border-amber-500/30 transition-all flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="text-2xl mb-1">{card.icon}</div>
+              <h3 class="text-base font-bold text-white">{card.title}</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">{card.desc}</p>
+            </div>
+            <a
+              href={card.href}
+              class="mt-4 pt-3 border-t border-slate-800 text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center justify-between group"
+            >
+              <span>解决方法</span>
+              <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- Section VII: AI短剧与AI创作专区             -->
+  <!-- ========================================== -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="cinema-glass rounded-3xl p-8 md:p-12 border border-amber-500/20 relative overflow-hidden">
+        <div class="absolute -right-24 -bottom-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-3xl space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold border border-amber-500/20">
+            AIGC短剧制作专区
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+            AI创作工具无法访问？
+          </h2>
+
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            部分AI视频、AI图片、AI语音及大模型服务可能受到地区、线路或网络环境影响。<br />
+            如果出现：<span class="text-amber-300 font-mono text-xs sm:text-sm">Region Not Supported / Network Error / Connection Timeout / Too Many Requests / 页面无法打开 / 资源无法加载</span>，先检查当前网络环境。
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            <a
+              href={SITE_CONFIG.guangsuCloudUrl}
+              target={SITE_CONFIG.externalLinkAttrs.target}
+              rel={SITE_CONFIG.externalLinkAttrs.rel}
+              class="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm md:text-base shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
+            >
+              <svg class="w-4 h-4 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              优化AI创作网络
+            </a>
+
+            <a
+              href="/ai-tools/"
+              class="inline-flex items-center justify-center gap-1.5 px-6 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-sm font-semibold transition-colors"
+            >
+              探索AI工具库 &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- Section XII: 下载APP区域融合                -->
+  <!-- ========================================== -->
+  <section id="app-download" class="scroll-mt-24 py-16 bg-slate-950 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="max-w-2xl mx-auto space-y-6">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+          把精彩短剧装进口袋
+        </h2>
+        <p class="text-sm md:text-base text-slate-400">
+          支持 iOS 与 Android 双平台，随时随地畅享4K画质微短剧
+        </p>
+
+        <!-- Primary Level 1 CTAs (Huangguo Short Drama) -->
+        <div class="flex flex-col items-center justify-center gap-4 pt-2">
+          <a
+            href={SITE_CONFIG.appDownloadUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-9 py-4 rounded-2xl bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 font-black text-lg md:text-xl shadow-2xl shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 cursor-pointer"
+          >
+            <span class="w-7 h-7 rounded-full bg-slate-950 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-[#f59e0b]" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <span>下载黄果短剧</span>
+          </a>
+
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-1">
+            <a
+              href={SITE_CONFIG.appDownloadUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white font-medium text-xs flex items-center gap-2 border border-slate-800 transition-colors"
+            >
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 1.01-2.87-.96.04-2.07.64-2.72 1.39-.56.64-1.07 1.7-0.93 2.74 1.07.08 2.03-.54 2.64-1.26z"/>
+              </svg>
+              iPhone 版直接获取
+            </a>
+
+            <a
+              href={SITE_CONFIG.appDownloadUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white font-medium text-xs flex items-center gap-2 border border-slate-800 transition-colors"
+            >
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5802 8.423 13.856 8.132 12 8.132c-1.856 0-3.5802.291-5.1368.8177L4.8409 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396"/>
+              </svg>
+              Android 版直接获取
+            </a>
+          </div>
+        </div>
+
+        <!-- Level 2 Conversion Helper (Section XII) -->
+        <div class="pt-4 text-xs text-slate-400 flex items-center justify-center gap-2">
+          <span>APP下载或连接异常？</span>
+          <a
+            href="/network/"
+            class="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-4 transition-colors"
+          >
+            查看网络解决方案 &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- Section XIV: FAQ 问答区域                   -->
+  <!-- ========================================== -->
+  <section class="py-16 md:py-24 border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
+          常见问题解答 (FAQ)
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">
+          了解关于黄果短剧观看、排障与网络优化的核心疑问
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <details class="cinema-glass rounded-xl p-5 border border-white/5 group">
+            <summary class="text-sm sm:text-base font-bold text-white cursor-pointer list-none flex items-center justify-between">
+              <span>{faq.q}</span>
+              <span class="text-amber-400 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/80 pt-3">
+              {faq.a}
+            </p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

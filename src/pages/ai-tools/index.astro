@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NetworkHelpCard from '../../components/NetworkHelpCard.astro';
+import { AI_TOOLS } from '../../data/aiTools';
+
+const categories = ['全部', '文本与剧本', '图像与分镜', 'AI视频生成', '多模态与平台'];
+const breadcrumbs = [
+  { name: '首页', url: '/' },
+  { name: 'AI创作工具', url: '/ai-tools/' },
+];
+
+const toolsCollectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AI短剧创作工具库',
+  description: '黄果短剧AI创作工具专题矩阵，汇总ChatGPT、Claude、Midjourney、Runway、Sora等顶尖工具。',
+  url: 'https://huangguoju.cyou/ai-tools/',
+  hasPart: AI_TOOLS.map((t) => ({
+    '@type': 'WebPage',
+    name: t.name,
+    description: t.tagline,
+    url: `https://huangguoju.cyou/ai-tools/${t.slug}/`,
+  })),
+};
+---
+
+<BaseLayout
+  title="AI短剧创作工具库"
+  description="黄果短剧AI创作工具专题矩阵，汇总ChatGPT、Claude、Midjourney、Runway、Sora、可灵等顶尖AI短剧制作工具的保姆级使用教程与网络连接异常解决方案。"
+  breadcrumbs={breadcrumbs}
+  schema={[toolsCollectionSchema]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+    <!-- Header -->
+    <div class="max-w-3xl mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold mb-3">
+        AI CREATION TOOLBOX
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+        AI短剧制作核心工具库
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        工欲善其事，必先利其器。我们精选了全球用于微短剧剧本编写、分镜原画设计、高保真动态视频生成的10大核心生产力工具，并提供详细的注册、创作与网络环境排障指引。
+      </p>
+    </div>
+
+    <!-- Tool Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {AI_TOOLS.map((tool) => (
+        <div class="cinema-glass cinema-glass-hover rounded-2xl p-6 border border-white/5 flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="flex items-start justify-between">
+              <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                {tool.icon}
+              </div>
+              <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700/60 font-medium">
+                {tool.category}
+              </span>
+            </div>
+
+            <div>
+              <div class="text-xs text-slate-400 font-mono">{tool.company}</div>
+              <h2 class="text-xl font-black text-white group-hover:text-amber-400 transition-colors">
+                {tool.name}
+              </h2>
+              <p class="text-xs text-slate-300 mt-1 line-clamp-2 leading-relaxed">
+                {tool.tagline}
+              </p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 text-xs text-slate-400">
+              <span class="text-amber-400 font-medium">短剧应用：</span>
+              {tool.howForDrama[0]}
+            </div>
+          </div>
+
+          <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
+            <a
+              href={`/ai-tools/${tool.slug}/#network`}
+              class="text-xs text-amber-400/80 hover:text-amber-300 flex items-center gap-1"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+              网络排障方案
+            </a>
+            <a
+              href={`/ai-tools/${tool.slug}/`}
+              class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-all shadow-sm"
+            >
+              查看完整教程 &rarr;
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Reusable Component: NetworkHelpCard -->
+    <NetworkHelpCard
+      title="海外AI工具提示 Region Not Supported？"
+      subtitle="OpenAI、Claude、Midjourney等服务普遍对大陆及常规机房IP进行了风控限制。搭配光速云专线方案，畅通无阻体验前沿AI。"
+    />
+  </div>
+</BaseLayout>

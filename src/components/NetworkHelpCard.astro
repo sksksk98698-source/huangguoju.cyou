@@ -1,0 +1,79 @@
+---
+import { SITE_CONFIG } from '../lib/constants';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  compact?: boolean;
+  className?: string;
+}
+
+const {
+  title = "访问不顺畅？",
+  subtitle = "黄果短剧、AI短剧或AI工具出现加载失败、连接超时？先检查当前网络环境。",
+  compact = false,
+  className = ""
+} = Astro.props;
+
+const tags = ["IEPL专线", "VLESS", "AI工具", "流媒体", "自研客户端", "多平台支持"];
+---
+
+<div class={`relative overflow-hidden rounded-2xl cinema-glass border border-amber-500/20 p-6 md:p-8 ${className}`}>
+  <!-- Decorative background light -->
+  <div class="absolute -right-20 -top-20 w-56 h-56 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -left-20 -bottom-20 w-56 h-56 bg-orange-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="space-y-3 max-w-2xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium">
+        <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        网络连接优化建议
+      </div>
+      
+      <h3 class="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+        {title}
+        <span class="text-xs font-normal px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+          推荐方案：光速云
+        </span>
+      </h3>
+
+      <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+        {subtitle}
+      </p>
+
+      <!-- Tags -->
+      <div class="flex flex-wrap gap-2 pt-1">
+        {tags.map((tag) => (
+          <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800/80 text-slate-300 border border-slate-700/60 font-mono">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end gap-3 shrink-0">
+      <a
+        href={SITE_CONFIG.guangsuCloudUrl}
+        target={SITE_CONFIG.externalLinkAttrs.target}
+        rel={SITE_CONFIG.externalLinkAttrs.rel}
+        class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm md:text-base transition-all duration-200 gold-glow hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-amber-500/20 cursor-pointer"
+      >
+        <svg class="w-5 h-5 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        立即使用光速云
+      </a>
+
+      <a
+        href="/network/"
+        class="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs md:text-sm text-slate-400 hover:text-amber-400 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        查看网络诊断指南 &rarr;
+      </a>
+    </div>
+  </div>
+</div>

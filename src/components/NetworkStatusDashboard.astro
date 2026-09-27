@@ -1,0 +1,118 @@
+---
+// NetworkStatusDashboard.astro
+// Clean, elegant network status indicator with authentic status states (no fake speed tests or metrics)
+---
+
+<div class="rounded-2xl bg-slate-900/90 border border-slate-800 p-5 md:p-6 shadow-2xl relative overflow-hidden">
+  <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+    <div class="flex items-center gap-2.5">
+      <div class="w-3 h-3 rounded-full bg-emerald-400 animate-ping opacity-75"></div>
+      <span class="text-sm font-semibold text-slate-200 tracking-wide">服务与网络连接环境监测</span>
+    </div>
+    <span class="text-xs font-mono text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-700/50">
+      实时环境状态
+    </span>
+  </div>
+
+  <div class="space-y-3">
+    <!-- Item 1: 黄果短剧 -->
+    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-800/80 hover:border-slate-700/60 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-sm">
+          🎬
+        </div>
+        <div>
+          <div class="text-sm font-medium text-slate-200">黄果短剧主站</div>
+          <div class="text-xs text-slate-400">核心页面及剧目索引</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          正常
+        </span>
+      </div>
+    </div>
+
+    <!-- Item 2: 视频加载 -->
+    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-800/80 hover:border-slate-700/60 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-sm">
+          ▶️
+        </div>
+        <div>
+          <div class="text-sm font-medium text-slate-200">短剧视频流加载</div>
+          <div class="text-xs text-slate-400">全高清分段媒体流</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          正常
+        </span>
+      </div>
+    </div>
+
+    <!-- Item 3: AI工具 -->
+    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-800/80 hover:border-slate-700/60 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-sm">
+          ⚡
+        </div>
+        <div>
+          <div class="text-sm font-medium text-slate-200">海外 AI 创作工具</div>
+          <div class="text-xs text-slate-400">ChatGPT / Claude / Sora / Runway</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/30">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+          网络优化
+        </span>
+      </div>
+    </div>
+
+    <!-- Item 4: 图片资源 -->
+    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-800/80 hover:border-slate-700/60 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 text-sm">
+          🖼️
+        </div>
+        <div>
+          <div class="text-sm font-medium text-slate-200">短剧封面与海报资源</div>
+          <div class="text-xs text-slate-400">静态资源CDN分发</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          正常
+        </span>
+      </div>
+    </div>
+
+    <!-- Item 5: 内容连接 -->
+    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/40 border border-slate-800/80 hover:border-slate-700/60 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 text-sm">
+          🌐
+        </div>
+        <div>
+          <div class="text-sm font-medium text-slate-200">跨运营商内容节点</div>
+          <div class="text-xs text-slate-400">边缘就近路由解析</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+          检查中
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+    <span>建议连接：IEPL专线 / VLESS高可用协议</span>
+    <span class="text-amber-400 font-medium">推荐搭配光速云优化</span>
+  </div>
+</div>

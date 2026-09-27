@@ -1,0 +1,213 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NetworkHelpCard from '../../components/NetworkHelpCard.astro';
+import { TUTORIALS, type TutorialArticle } from '../../data/tutorials';
+import { SITE_CONFIG } from '../../lib/constants';
+
+export function getStaticPaths() {
+  return TUTORIALS.map((tutorial) => ({
+    params: { slug: tutorial.slug },
+    props: { tutorial },
+  }));
+}
+
+interface Props {
+  tutorial: TutorialArticle;
+}
+
+const { tutorial } = Astro.props;
+
+// Related tutorials from same or adjacent categories
+const relatedTutorials = TUTORIALS.filter((t) => t.slug !== tutorial.slug).slice(0, 3);
+
+const breadcrumbs = [
+  { name: '首页', url: '/' },
+  { name: '排障与教程', url: '/tutorials/' },
+  { name: tutorial.title, url: `/tutorials/${tutorial.slug}/` },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: tutorial.title,
+  description: tutorial.description,
+  datePublished: `${tutorial.date}T08:00:00+08:00`,
+  dateModified: `${tutorial.date}T12:00:00+08:00`,
+  author: {
+    '@type': 'Organization',
+    name: '黄果短剧',
+    url: `${SITE_CONFIG.url}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: '黄果短剧',
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_CONFIG.url}/images/hero-banner.png`,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `${SITE_CONFIG.url}/tutorials/${tutorial.slug}/`,
+  },
+};
+
+const howToSchema = tutorial.steps && tutorial.steps.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: tutorial.title,
+  description: tutorial.description,
+  step: tutorial.steps.map((s, idx) => ({
+    '@type': 'HowToStep',
+    position: idx + 1,
+    name: s.heading,
+    text: s.content,
+  })),
+} : null;
+
+const schemas = [articleSchema];
+if (howToSchema) schemas.push(howToSchema);
+---
+
+<BaseLayout
+  title={tutorial.title}
+  description={tutorial.description}
+  type="article"
+  publishedTime={`${tutorial.date}T08:00:00+08:00`}
+  modifiedTime={`${tutorial.date}T12:00:00+08:00`}
+  author="黄果短剧"
+  section={tutorial.category}
+  breadcrumbs={breadcrumbs}
+  schema={schemas}
+  isNetworkContext={true}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-xs text-slate-400 mb-8">
+      <a href="/" class="hover:text-amber-400">首页</a>
+      <span>/</span>
+      <a href="/tutorials/" class="hover:text-amber-400">排障与教程</a>
+      <span>/</span>
+      <span class="text-slate-200 line-clamp-1">{tutorial.title}</span>
+    </nav>
+
+    <!-- Article Header -->
+    <header class="cinema-glass rounded-3xl p-6 md:p-10 border border-white/5 mb-10 space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="text-xs px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 font-semibold">
+          {tutorial.category}
+        </span>
+        <span class="text-xs text-slate-400 font-mono">
+          更新日期：{tutorial.date}
+        </span>
+        <span class="text-xs text-slate-400">
+          阅读约 {tutorial.readTime}
+        </span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
+        {tutorial.title}
+      </h1>
+
+      <p class="text-slate-300 text-sm md:text-base leading-relaxed border-t border-slate-800/80 pt-4">
+        {tutorial.intro}
+      </p>
+    </header>
+
+    <!-- Main Content Steps -->
+    <article class="space-y-8 mb-12">
+      {tutorial.steps.map((step, idx) => (
+        <section class="cinema-glass rounded-2xl p-6 md:p-8 border border-white/5 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 font-mono text-xs font-bold flex items-center justify-center">
+              0{idx + 1}
+            </span>
+            <h2 class="text-base sm:text-xl font-bold text-white">
+              {step.heading}
+            </h2>
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed pl-10">
+            {step.content}
+          </p>
+
+          {step.tips && (
+            <div class="ml-10 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200/90">
+              <span class="font-bold text-amber-400">实操提示：</span> {step.tips}
+            </div>
+          )}
+        </section>
+      ))}
+
+      <!-- Section X: Truly contextual network environment solution section -->
+      {tutorial.networkTip && (
+        <section class="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-amber-950/20 to-slate-900 border border-amber-500/30 space-y-4">
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            网络环境排障核心总结
+          </div>
+
+          <h3 class="text-lg md:text-xl font-black text-white">
+            异常诱因：{tutorial.networkTip.cause}
+          </h3>
+
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            {tutorial.networkTip.solution}
+          </p>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <a
+              href={SITE_CONFIG.guangsuCloudUrl}
+              target={SITE_CONFIG.externalLinkAttrs.target}
+              rel={SITE_CONFIG.externalLinkAttrs.rel}
+              class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              <svg class="w-4 h-4 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              使用光速云改善连接
+            </a>
+
+            <a
+              href="/network/"
+              class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-800 text-slate-200 text-xs hover:bg-slate-700 transition-colors"
+            >
+              进入网络诊断中心自查 &rarr;
+            </a>
+          </div>
+        </section>
+      )}
+    </article>
+
+    <!-- Reusable Component: NetworkHelpCard (Occurring at the end of article, max 2 occurrences respected) -->
+    <div class="mb-14">
+      <NetworkHelpCard
+        title="黄果短剧推荐网络解决方案"
+        subtitle="在复杂网络、跨网互联或海外AI工具使用受阻时，搭配光速云优化网络连接，畅享稳定高速追剧与创作体验。"
+      />
+    </div>
+
+    <!-- Related Articles -->
+    <div class="space-y-4">
+      <h3 class="text-sm font-bold text-white uppercase tracking-wider">
+        相关故障排查与创作教程
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {relatedTutorials.map((item) => (
+          <a
+            href={`/tutorials/${item.slug}/`}
+            class="cinema-glass p-4 rounded-xl border border-white/5 hover:border-amber-500/30 transition-all flex flex-col justify-between group"
+          >
+            <div class="space-y-1.5">
+              <span class="text-[10px] text-amber-400 font-mono">{item.category}</span>
+              <h4 class="text-xs font-bold text-white group-hover:text-amber-300 transition-colors line-clamp-2">
+                {item.title}
+              </h4>
+            </div>
+            <span class="text-[11px] text-slate-500 mt-2 block">&rarr; 查看教程</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

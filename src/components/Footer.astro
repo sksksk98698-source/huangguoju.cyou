@@ -1,0 +1,109 @@
+---
+import { SITE_CONFIG } from '../lib/constants';
+
+interface Props {
+  showNetworkNotice?: boolean;
+}
+
+const { showNetworkNotice = true } = Astro.props;
+---
+
+<footer class="mt-20 border-t border-slate-800/80 bg-slate-950 text-slate-400 relative">
+  {showNetworkNotice && (
+    <div class="border-b border-slate-800/60 bg-gradient-to-r from-slate-900/60 via-amber-950/20 to-slate-900/60">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl border border-amber-500/15 bg-slate-900/40">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+              <h4 class="text-sm font-semibold text-slate-200">访问遇到问题？</h4>
+            </div>
+            <p class="text-xs md:text-sm text-slate-400">
+              如果黄果短剧、视频内容或AI创作工具在你的网络环境中无法正常连接，可以尝试更换网络或使用光速云优化连接。
+            </p>
+          </div>
+          <a
+            href={SITE_CONFIG.guangsuCloudUrl}
+            target={SITE_CONFIG.externalLinkAttrs.target}
+            rel={SITE_CONFIG.externalLinkAttrs.rel}
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs md:text-sm font-medium transition-colors shrink-0 whitespace-nowrap"
+          >
+            使用光速云
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  )}
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+      <!-- Brand column -->
+      <div class="col-span-2 space-y-4">
+        <a href="/" class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-slate-950 font-black shadow-md">
+            🎬
+          </div>
+          <span class="text-lg font-bold text-white tracking-tight">黄果短剧</span>
+        </a>
+        <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+          让 AI 重塑短剧创作的无限可能。聚合优质精品AI短剧、AI漫剧与深度制作教程，为用户提供沉浸式视听体验与稳定连接排障方案。
+        </p>
+        <div class="text-xs text-slate-400 font-mono">
+          域名：huangguoju.cyou
+        </div>
+      </div>
+
+      <!-- Links: Content -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-semibold text-slate-200 uppercase tracking-wider">剧场与专区</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="/drama/" class="hover:text-amber-400 transition-colors">热门短剧推荐</a></li>
+          <li><a href="/ai-drama/" class="hover:text-amber-400 transition-colors">AI精品短剧专区</a></li>
+          <li><a href="/ai-drama/#comic" class="hover:text-amber-400 transition-colors">AI漫剧剧场</a></li>
+          <li><a href="/drama/#top" class="hover:text-amber-400 transition-colors">全剧集排行榜</a></li>
+        </ul>
+      </div>
+
+      <!-- Links: AI Tools -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-semibold text-slate-200 uppercase tracking-wider">AI创作工具库</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="/ai-tools/chatgpt/" class="hover:text-amber-400 transition-colors">ChatGPT 剧本创作</a></li>
+          <li><a href="/ai-tools/claude/" class="hover:text-amber-400 transition-colors">Claude 剧情打磨</a></li>
+          <li><a href="/ai-tools/sora/" class="hover:text-amber-400 transition-colors">Sora 短剧视频</a></li>
+          <li><a href="/ai-tools/runway/" class="hover:text-amber-400 transition-colors">Runway Gen-3</a></li>
+          <li><a href="/ai-tools/veo/" class="hover:text-amber-400 transition-colors">Veo 视频制作</a></li>
+          <li><a href="/ai-tools/" class="text-amber-400/80 hover:text-amber-300">全部工具矩阵 &rarr;</a></li>
+        </ul>
+      </div>
+
+      <!-- Links: Network & Help -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-semibold text-slate-200 uppercase tracking-wider">排障与指南</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="/network/" class="hover:text-amber-400 transition-colors">网络诊断中心</a></li>
+          <li><a href="/tutorials/huangguoju-cant-open/" class="hover:text-amber-400 transition-colors">打不开完整排查</a></li>
+          <li><a href="/tutorials/video-load-failed/" class="hover:text-amber-400 transition-colors">视频加载失败排查</a></li>
+          <li><a href="/tutorials/region-not-supported/" class="hover:text-amber-400 transition-colors">Region Not Supported</a></li>
+          <li><a href="/tutorials/" class="text-amber-400/80 hover:text-amber-300">24+ 排障教程 &rarr;</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-900 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+      <div>
+        &copy; {new Date().getFullYear()} 黄果短剧 huangguoju.cyou · 保留所有权利
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/network/" class="hover:text-slate-400">网络状态监测</a>
+        <span>·</span>
+        <a href="/sitemap-index.xml" class="hover:text-slate-400">网站地图</a>
+        <span>·</span>
+        <span class="text-slate-400">影视与AI学术创作分享</span>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NetworkHelpCard from '../../components/NetworkHelpCard.astro';
+import { AI_TOOLS, type AiToolItem } from '../../data/aiTools';
+import { SITE_CONFIG } from '../../lib/constants';
+
+export function getStaticPaths() {
+  return AI_TOOLS.map((tool) => ({
+    params: { tool: tool.slug },
+    props: { tool },
+  }));
+}
+
+interface Props {
+  tool: AiToolItem;
+}
+
+const { tool } = Astro.props;
+
+const breadcrumbs = [
+  { name: '首页', url: '/' },
+  { name: 'AI创作工具', url: '/ai-tools/' },
+  { name: `${tool.name}短剧指南`, url: `/ai-tools/${tool.slug}/` },
+];
+
+const toolPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: `${tool.name} 短剧创作指南`,
+  headline: `${tool.name} 短剧创作指南与网络排障`,
+  description: tool.whatIsIt,
+  url: `${SITE_CONFIG.url}/ai-tools/${tool.slug}/`,
+};
+
+const toolFaqSchema = tool.faqs && tool.faqs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: tool.faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a,
+    },
+  })),
+} : null;
+
+const schemas = [toolPageSchema];
+if (toolFaqSchema) schemas.push(toolFaqSchema);
+---
+
+<BaseLayout
+  title={`${tool.name}短剧制作完整教程与网络排障`}
+  description={`${tool.name}是什么？如何用于爆款短剧剧本与视频制作？提供${tool.name}注册步骤、常见问题与Region Not Supported/Network Error网络排障指南。`}
+  breadcrumbs={breadcrumbs}
+  schema={schemas}
+  isNetworkContext={true}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-xs text-slate-400 mb-8">
+      <a href="/" class="hover:text-amber-400">首页</a>
+      <span>/</span>
+      <a href="/ai-tools/" class="hover:text-amber-400">AI创作工具</a>
+      <span>/</span>
+      <span class="text-slate-200">{tool.name} 制作与排障教程</span>
+    </nav>
+
+    <!-- Header Banner -->
+    <div class="cinema-glass rounded-3xl p-6 md:p-10 border border-white/5 mb-12 relative overflow-hidden">
+      <div class="flex items-start justify-between gap-4">
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 font-medium">
+              {tool.category}
+            </span>
+            <span class="text-xs text-slate-400 font-mono">
+              开发商：{tool.company}
+            </span>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+            {tool.name} 短剧创作指南
+          </h1>
+
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            {tool.tagline}
+          </p>
+        </div>
+
+        <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-3xl md:text-4xl shrink-0">
+          {tool.icon}
+        </div>
+      </div>
+    </div>
+
+    <!-- The 7 Core Sections Required in Section VIII -->
+    <div class="space-y-12">
+      <!-- 1. 工具是什么 -->
+      <section class="cinema-glass rounded-2xl p-6 md:p-8 border border-white/5 space-y-4">
+        <div class="flex items-center gap-2.5 text-amber-400 text-sm font-bold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          01. 工具是什么
+        </div>
+        <h2 class="text-xl md:text-2xl font-black text-white">
+          认识 {tool.name}
+        </h2>
+        <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+          {tool.whatIsIt}
+        </p>
+      </section>
+
+      <!-- 2. 可以做什么 -->
+      <section class="cinema-glass rounded-2xl p-6 md:p-8 border border-white/5 space-y-4">
+        <div class="flex items-center gap-2.5 text-amber-400 text-sm font-bold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          02. 可以做什么
+        </div>
+        <h2 class="text-xl md:text-2xl font-black text-white">
+          核心功能与生成能力
+        </h2>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          {tool.whatItCanDo.map((item) => (
+            <li class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs sm:text-sm text-slate-300">
+              <span class="text-amber-400 font-bold shrink-0">✓</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <!-- 3. 如何用于短剧制作 -->
+      <section class="cinema-glass rounded-2xl p-6 md:p-8 border border-white/5 space-y-4">
+        <div class="flex items-center gap-2.5 text-amber-400 text-sm font-bold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          03. 如何用于短剧制作
+        </div>
+        <h2 class="text-xl md:text-2xl font-black text-white">
+          黄果短剧工业化实操方法
+        </h2>
+        <div class="space-y-3 pt-2">
+          {tool.howForDrama.map((method, idx) => (
+            <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800/80 flex items-start gap-3">
+              <span class="w-6 h-6 rounded-md bg-amber-500/20 text-amber-400 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                {idx + 1}
+              </span>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                {method}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- 4. 注册与使用教程 -->
+      <section class="cinema-glass rounded-2xl p-6 md:p-8 border border-white/5 space-y-4">
+        <div class="flex items-center gap-2.5 text-amber-400 text-sm font-bold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          04. 注册与使用教程
+        </div>
+        <h2 class="text-xl md:text-2xl font-black text-white">
+          从零上手步骤指引
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          {tool.tutorialSteps.map((step) => (
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+              <span class="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">
+                STEP {step.step}
+              </span>
+              <h3 class="text-sm font-bold text-white">{step.title}</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- 5. 常见问题 -->
+      <section class="cinema-glass rounded-2xl p-6 md:p-8 border border-white/5 space-y-4">
+        <div class="flex items-center gap-2.5 text-amber-400 text-sm font-bold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          05. 常见创作问题
+        </div>
+        <h2 class="text-xl md:text-2xl font-black text-white">
+          高频疑问解答
+        </h2>
+        <div class="space-y-3 pt-2">
+          {tool.faqs.map((faq) => (
+            <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800 space-y-2">
+              <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2">
+                <span>Q:</span> {faq.q}
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed pl-5">
+                {faq.a}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- 6. 网络异常处理 -->
+      <section id="network" class="cinema-glass rounded-2xl p-6 md:p-8 border border-amber-500/30 space-y-6">
+        <div class="flex items-center gap-2.5 text-amber-400 text-sm font-bold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          06. 网络异常处理
+        </div>
+        <div>
+          <h2 class="text-xl md:text-2xl font-black text-white">
+            {tool.name} 常见网络与访问报错排障
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            海外先进AI平台由于防火墙、机房IP封锁和跨境延迟，极易产生连接中断。
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          {tool.networkIssues.map((issue) => (
+            <div class="p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <span class="text-rose-400">⚠️</span> {issue.title}
+                </h3>
+                <span class="text-xs font-mono px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20 w-fit">
+                  {issue.errorCode}
+                </span>
+              </div>
+
+              <p class="text-xs text-slate-300 leading-relaxed">
+                {issue.description}
+              </p>
+
+              <div class="pt-2 border-t border-slate-800 text-xs space-y-1.5">
+                <span class="font-bold text-amber-400">排查建议：</span>
+                <ul class="list-disc list-inside space-y-1 text-slate-300 pl-1">
+                  {issue.troubleshoot.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- 7. 推荐光速云 (Section VIII & Section XV Implementation) -->
+      <section>
+        <NetworkHelpCard
+          title={`使用光速云畅通访问 ${tool.name}`}
+          subtitle={`针对 ${tool.name} 的高防屏蔽与长连接特性，光速云提供IEPL高速专线与原生IP支持，彻底告别 Region Not Supported 与连接超时。`}
+        />
+      </section>
+    </div>
+  </div>
+</BaseLayout>

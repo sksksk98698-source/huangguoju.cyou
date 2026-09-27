@@ -1,0 +1,58 @@
+---
+import { SITE_CONFIG } from '../lib/constants';
+
+interface Props {
+  isNetworkContext?: boolean;
+}
+
+const { isNetworkContext = false } = Astro.props;
+---
+
+<div class="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-slate-950/95 backdrop-blur-md border-t border-slate-800/80 px-4 py-3 shadow-2xl">
+  <div class="flex items-center justify-between gap-3">
+    {isNetworkContext ? (
+      <div class="flex items-center justify-between w-full gap-2">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span class="text-xs font-medium text-slate-200">访问或连接有问题？</span>
+        </div>
+        <a
+          href={SITE_CONFIG.guangsuCloudUrl}
+          target={SITE_CONFIG.externalLinkAttrs.target}
+          rel={SITE_CONFIG.externalLinkAttrs.rel}
+          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 active:scale-95 transition-all"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          使用光速云
+        </a>
+      </div>
+    ) : (
+      <div class="flex items-center justify-between w-full gap-2">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded-md bg-amber-500 flex items-center justify-center text-slate-950 text-xs font-black">
+            🎬
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white">黄果短剧</div>
+            <div class="text-[10px] text-slate-400">海量精品AI短剧随心看</div>
+          </div>
+        </div>
+        <a
+          href={SITE_CONFIG.appDownloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 font-black text-xs shadow-md shadow-amber-500/20 active:scale-95 transition-all"
+        >
+          <span class="w-4 h-4 rounded-full bg-slate-950 flex items-center justify-center shrink-0">
+            <svg class="w-2.5 h-2.5 text-[#f59e0b]" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v10.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 14.586V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+          </span>
+          下载APP
+        </a>
+      </div>
+    )}
+  </div>
+</div>

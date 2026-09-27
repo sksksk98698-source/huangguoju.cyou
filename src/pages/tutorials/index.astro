@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NetworkHelpCard from '../../components/NetworkHelpCard.astro';
+import { TUTORIALS } from '../../data/tutorials';
+
+const categories = ['全部', '基础排障', '观看教程', 'AI短剧创作', 'AI工具排障'];
+const breadcrumbs = [
+  { name: '首页', url: '/' },
+  { name: '排障与教程', url: '/tutorials/' },
+];
+
+const tutorialsCollectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '黄果短剧排障与教程中心',
+  description: '汇总短剧打不开、视频加载失败、一直转圈解决指南，以及ChatGPT/Claude/Sora制作AI短剧教程。',
+  url: 'https://huangguoju.cyou/tutorials/',
+  hasPart: TUTORIALS.map((t) => ({
+    '@type': 'Article',
+    name: t.title,
+    description: t.description,
+    url: `https://huangguoju.cyou/tutorials/${t.slug}/`,
+  })),
+};
+---
+
+<BaseLayout
+  title="黄果短剧排障与教程中心"
+  description="黄果短剧官方教程与排障中心：汇总短剧打不开、视频加载失败、一直转圈解决指南，以及ChatGPT/Claude/Sora/Runway制作AI短剧教程与网络优化方案。"
+  breadcrumbs={breadcrumbs}
+  schema={[tutorialsCollectionSchema]}
+  isNetworkContext={true}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+    <!-- Header -->
+    <div class="max-w-3xl mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold mb-3">
+        KNOWLEDGE & TUTORIALS
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+        排障指南与使用教程矩阵
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        全景式收录黄果短剧常见播放故障排查清单、客户端使用技巧与AIGC短剧工业化生产教程，解决网络异常阻碍，助你顺畅追剧与高效创作。
+      </p>
+    </div>
+
+    <!-- Category filter buttons -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+      {categories.map((cat, idx) => (
+        <button
+          class={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors ${
+            idx === 0
+              ? 'bg-amber-500 text-slate-950 shadow-md'
+              : 'cinema-glass text-slate-300 hover:text-white'
+          }`}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Articles Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {TUTORIALS.map((item) => (
+        <a
+          href={`/tutorials/${item.slug}/`}
+          class="cinema-glass cinema-glass-hover rounded-2xl p-6 border border-white/5 flex flex-col justify-between group"
+        >
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs px-2.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-medium">
+                {item.category}
+              </span>
+              <span class="text-xs text-slate-400 font-mono">
+                {item.readTime}
+              </span>
+            </div>
+
+            <h2 class="text-base sm:text-lg font-bold text-white group-hover:text-amber-400 transition-colors leading-snug">
+              {item.title}
+            </h2>
+
+            <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+              {item.description}
+            </p>
+          </div>
+
+          <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+            <span>浏览 {item.views}</span>
+            <span class="text-amber-400 font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1">
+              阅读全文 &rarr;
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Reusable Component: NetworkHelpCard -->
+    <NetworkHelpCard
+      title="遇到复杂网络问题无法自行解决？"
+      subtitle="运营商跨网路由抖动与海外AI平台风控往往难以在本地彻底根除。搭配光速云专线方案，一键改善网络环境。"
+    />
+  </div>
+</BaseLayout>

@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { DRAMAS } from '../../data/dramas';
+
+const categories = ['全部', '爽文逆袭', '赛博科幻', '都市职场', 'AI生成漫剧', '悬疑反转'];
+const breadcrumbs = [
+  { name: '首页', url: '/' },
+  { name: '热门短剧', url: '/drama/' },
+];
+
+const dramaCollectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '热门短剧与AI漫剧大厅',
+  description: '黄果短剧全网爆款片库，包含百亿豪门逆袭、赛博修真、高燃战神等多品类高清微短剧。',
+  url: 'https://huangguoju.cyou/drama/',
+  hasPart: DRAMAS.map((d) => ({
+    '@type': 'Movie',
+    name: d.title,
+    description: d.description,
+    url: `https://huangguoju.cyou/drama/${d.slug}/`,
+  })),
+};
+---
+
+<BaseLayout
+  title="热门短剧片库"
+  description="黄果短剧全网爆款片库，包含百亿豪门逆袭、赛博修真、高燃战神、悬疑科幻等多品类高清微短剧与AIGC漫剧，全集在线无广告播放。"
+  breadcrumbs={breadcrumbs}
+  schema={[dramaCollectionSchema]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+    <!-- Header -->
+    <div class="mb-10 text-center md:text-left">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold mb-3">
+        DRAMA ARCHIVE
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+        热门短剧与AI漫剧大厅
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base max-w-2xl">
+        涵盖当下最火热的爽文反转、商海争锋与前沿AIGC视听大作，支持多清晰度切片与极速开播。
+      </p>
+    </div>
+
+    <!-- Category Filter pills -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+      {categories.map((cat, idx) => (
+        <button
+          class={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors ${
+            idx === 0
+              ? 'bg-amber-500 text-slate-950 shadow-md'
+              : 'cinema-glass text-slate-300 hover:text-white hover:border-slate-600'
+          }`}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Drama Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {DRAMAS.map((drama) => (
+        <div class="group cinema-glass cinema-glass-hover rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
+          <div class={`h-52 bg-gradient-to-br ${drama.gradient} p-5 relative flex flex-col justify-between`}>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold px-2.5 py-1 rounded bg-black/60 backdrop-blur-md text-amber-300 border border-white/10">
+                {drama.category}
+              </span>
+              <span class="text-xs font-mono text-slate-200 bg-slate-900/60 px-2 py-0.5 rounded">
+                播放量 {drama.views}
+              </span>
+            </div>
+
+            <div>
+              <span class="text-xs font-semibold text-amber-300/90 block mb-1">
+                {drama.badge}
+              </span>
+              <h2 class="text-xl font-black text-white group-hover:text-amber-300 transition-colors">
+                {drama.title}
+              </h2>
+              <p class="text-xs text-slate-300 line-clamp-1 mt-1">
+                {drama.subtitle}
+              </p>
+            </div>
+          </div>
+
+          <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+            <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+              {drama.description}
+            </p>
+
+            <div class="flex flex-wrap gap-1.5">
+              {drama.highlights.map((h) => (
+                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-amber-300/80 border border-slate-700/50">
+                  {h}
+                </span>
+              ))}
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+              <div class="text-xs text-slate-400">
+                <span class="text-amber-400 font-bold">{drama.rating}分</span> · {drama.episodes}集全
+              </div>
+              <a
+                href={`/drama/${drama.slug}/`}
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all"
+              >
+                立即观看
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Troubleshooting prompt bar -->
+    <div class="cinema-glass rounded-2xl p-6 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="space-y-1 text-center sm:text-left">
+        <h3 class="text-sm font-bold text-white">选集播放加载缓慢？</h3>
+        <p class="text-xs text-slate-400">
+          短剧采用全高清切片分发，若出现一直转圈或无法加载，可使用网络诊断中心快速排查。
+        </p>
+      </div>
+      <a
+        href="/network/"
+        class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/20 text-xs font-medium whitespace-nowrap transition-colors"
+      >
+        进入网络诊断中心 &rarr;
+      </a>
+    </div>
+  </div>
+</BaseLayout>

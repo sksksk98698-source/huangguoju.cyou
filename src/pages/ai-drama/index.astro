@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NetworkHelpCard from '../../components/NetworkHelpCard.astro';
+import { DRAMAS } from '../../data/dramas';
+import { SITE_CONFIG } from '../../lib/constants';
+
+const aiDramas = DRAMAS.filter((d) => d.isAiCreated);
+
+const aiWorkflows = [
+  {
+    step: '01 剧本与对白构思',
+    tools: 'Claude 3.7 / ChatGPT',
+    desc: '利用大模型提炼强冲突爽点、编写卡点台词与分镜Prompt。',
+    icon: '📝'
+  },
+  {
+    step: '02 角色与分镜生成',
+    tools: 'Midjourney v6 / SD',
+    desc: '通过角色一致性参数（--cref）生成全剧主演定妆与竖屏概念图。',
+    icon: '🎨'
+  },
+  {
+    step: '03 动态视频镜头生成',
+    tools: 'Runway Gen-3 / Sora / 可灵',
+    desc: '让静态分镜在电影级运镜与物理模拟下动起来，渲染高保真短剧片段。',
+    icon: '🎬'
+  },
+  {
+    step: '04 音效配音与剪辑',
+    tools: 'ElevenLabs / Suno AI',
+    desc: 'AI克隆真实情绪配音，智能卡点音乐音效合成，完成全剧成片。',
+    icon: '🎧'
+  }
+];
+const breadcrumbs = [
+  { name: '首页', url: '/' },
+  { name: 'AI短剧专区', url: '/ai-drama/' },
+];
+
+const aiDramaSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AI短剧与AI漫剧专区',
+  description: '黄果短剧AIGC创新剧场，展示由Sora、Runway、Midjourney全流程制作的微短剧与漫剧。',
+  url: `${SITE_CONFIG.url}/ai-drama/`,
+};
+---
+
+<BaseLayout
+  title="AI短剧与AI漫剧专区"
+  description="黄果短剧AIGC创新剧场，展示由Sora、Runway、Midjourney全流程制作的赛博科幻、悬疑修真微短剧与漫剧，并提供AI工具访问排障支持。"
+  breadcrumbs={breadcrumbs}
+  schema={[aiDramaSchema]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+    <!-- Header -->
+    <div class="max-w-3xl mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold mb-3">
+        AIGC DRAMA THEATER
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+        AI短剧 · AI漫剧创作与展映专区
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        告别传统影视沉重拍摄周期，黄果短剧携手全球前沿AI艺术家，用算力重塑视觉盛宴。在这里不仅能观摩顶级AIGC作品，更能学习全套制作工作流。
+      </p>
+    </div>
+
+    <!-- AI Dramas Showcase -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      {aiDramas.map((drama) => (
+        <div class="cinema-glass rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between group hover:border-amber-500/30 transition-all">
+          <div class={`h-48 bg-gradient-to-br ${drama.gradient} p-5 relative flex flex-col justify-between`}>
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-black/60 text-amber-400 border border-white/10 w-fit">
+              {drama.badge}
+            </span>
+            <div>
+              <h2 class="text-lg font-black text-white group-hover:text-amber-300 transition-colors">
+                {drama.title}
+              </h2>
+              <p class="text-xs text-slate-300 mt-1">{drama.subtitle}</p>
+            </div>
+          </div>
+
+          <div class="p-5 space-y-4">
+            <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+              {drama.description}
+            </p>
+
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs space-y-1">
+              <span class="text-[11px] font-bold text-amber-400">制作技术：</span>
+              <p class="text-[11px] font-mono text-slate-300">{drama.aiTech}</p>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between">
+              <span class="text-xs text-slate-400">{drama.views} 次播放</span>
+              <a
+                href={`/drama/${drama.slug}/`}
+                class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition-all"
+              >
+                播放正片 &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Section VII Implementation: AI创作工具无法访问？专区融合模块 -->
+    <div class="cinema-glass rounded-3xl p-8 md:p-12 border border-amber-500/30 relative overflow-hidden mb-16">
+      <div class="max-w-3xl space-y-5">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold">
+          AI 创作网络加速
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          AI创作工具无法访问？
+        </h2>
+
+        <p class="text-sm md:text-base text-slate-300 leading-relaxed">
+          部分AI视频、AI图片、AI语音及大模型服务可能受到地区、线路或网络环境影响。<br />
+          如果出现：
+        </p>
+
+        <!-- Error codes chips -->
+        <div class="flex flex-wrap gap-2 text-xs font-mono">
+          {[
+            'Region Not Supported',
+            'Network Error',
+            'Connection Timeout',
+            'Too Many Requests',
+            '页面无法打开',
+            '资源无法加载',
+          ].map((err) => (
+            <span class="px-2.5 py-1 rounded-md bg-rose-500/10 border border-rose-500/25 text-rose-300">
+              {err}
+            </span>
+          ))}
+        </div>
+
+        <p class="text-xs sm:text-sm text-slate-400">
+          先检查当前网络环境。若无法访问海外AI生成服务，可使用光速云专线快速解决。
+        </p>
+
+        <div class="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <a
+            href={SITE_CONFIG.guangsuCloudUrl}
+            target={SITE_CONFIG.externalLinkAttrs.target}
+            rel={SITE_CONFIG.externalLinkAttrs.rel}
+            class="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm md:text-base gold-glow transition-all active:scale-95 cursor-pointer shadow-lg shadow-amber-500/20"
+          >
+            <svg class="w-4 h-4 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            优化AI创作网络
+          </a>
+
+          <a
+            href="/tutorials/ai-drama-generator-cant-open/"
+            class="inline-flex items-center justify-center gap-1.5 px-6 py-3 rounded-xl cinema-glass text-slate-200 text-xs sm:text-sm font-semibold hover:border-slate-600 transition-colors"
+          >
+            阅读排查指南 &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Workflow Section -->
+    <div class="mb-16">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2">
+          工业化 AI 短剧全流程工作流
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400">
+          从文本大纲到成片输出的标准化生产管线
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {aiWorkflows.map((flow) => (
+          <div class="cinema-glass rounded-2xl p-5 border border-white/5 space-y-3">
+            <div class="text-2xl">{flow.icon}</div>
+            <div class="text-xs font-mono text-amber-400">{flow.step}</div>
+            <div class="text-sm font-bold text-white">{flow.tools}</div>
+            <p class="text-xs text-slate-400 leading-relaxed">{flow.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Reusable Component: NetworkHelpCard -->
+    <NetworkHelpCard
+      title="制作短剧遇到AI网络错误？"
+      subtitle="生成大模型与视频渲染平台对长连接和IP属地有严苛要求。使用光速云搭配专线，保障创作链路无阻。"
+    />
+  </div>
+</BaseLayout>

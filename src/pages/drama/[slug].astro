@@ -1,0 +1,265 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NetworkHelpCard from '../../components/NetworkHelpCard.astro';
+import { DRAMAS, type DramaItem } from '../../data/dramas';
+import { SITE_CONFIG } from '../../lib/constants';
+
+export function getStaticPaths() {
+  return DRAMAS.map((drama) => ({
+    params: { slug: drama.slug },
+    props: { drama },
+  }));
+}
+
+interface Props {
+  drama: DramaItem;
+}
+
+const { drama } = Astro.props;
+
+// Mock 30 episodes list for navigation
+const episodeList = Array.from({ length: Math.min(drama.episodes, 40) }, (_, i) => i + 1);
+
+const breadcrumbs = [
+  { name: '首页', url: '/' },
+  { name: '热门短剧', url: '/drama/' },
+  { name: drama.title, url: `/drama/${drama.slug}/` },
+];
+
+const dramaSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Movie',
+  name: drama.title,
+  headline: drama.title,
+  description: drama.description,
+  url: `${SITE_CONFIG.url}/drama/${drama.slug}/`,
+  image: `${SITE_CONFIG.url}/images/hero-banner.png`,
+  genre: drama.category,
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: drama.rating,
+    bestRating: '10',
+    ratingCount: '1280',
+  },
+};
+---
+
+<BaseLayout
+  title={`${drama.title} (1-${drama.episodes}集全)`}
+  description={`${drama.title} - ${drama.description} 黄果短剧提供${drama.category}全集无卡顿极速播放。`}
+  breadcrumbs={breadcrumbs}
+  schema={[dramaSchema]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-xs text-slate-400 mb-6">
+      <a href="/" class="hover:text-amber-400">首页</a>
+      <span>/</span>
+      <a href="/drama/" class="hover:text-amber-400">热门短剧</a>
+      <span>/</span>
+      <span class="text-slate-200">{drama.title}</span>
+    </nav>
+
+    <!-- Player & Meta Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+      <!-- Left: Simulated Player Screen -->
+      <div class="lg:col-span-8 space-y-4">
+        <div class="relative aspect-video rounded-3xl bg-slate-950 border border-slate-800 overflow-hidden shadow-2xl flex items-center justify-center group">
+          <!-- Background Poster with gradient -->
+          <div class={`absolute inset-0 bg-gradient-to-br ${drama.gradient} opacity-75`}></div>
+          <div class="absolute inset-0 bg-black/40 backdrop-blur-xs"></div>
+
+          <!-- Play button -->
+          <div class="relative z-10 text-center space-y-3">
+            <button
+              type="button"
+              id="main-play-btn"
+              class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-2xl gold-glow hover:scale-110 active:scale-95 transition-all mx-auto cursor-pointer"
+            >
+              <svg class="w-8 h-8 fill-current ml-1" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+            <div class="text-white text-sm md:text-base font-bold drop-shadow-md">
+              点击开始播放 第 1 集
+            </div>
+            <div class="text-xs text-slate-300 drop-shadow">
+              4K 极清流媒体 · 自动连播
+            </div>
+          </div>
+
+          <!-- Player UI Controls Overlay (Simulated) -->
+          <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent flex items-center justify-between text-xs text-slate-300 z-10">
+            <div class="flex items-center gap-3">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>CDN节点已连接</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span>清晰度：4K超清</span>
+              <span>倍速：1.0X</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Player Actions & SECTION VI Implementation -->
+        <div class="cinema-glass rounded-2xl p-5 border border-white/5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-xl md:text-2xl font-black text-white">{drama.title}</h1>
+              <p class="text-xs text-slate-400 mt-1">{drama.subtitle}</p>
+            </div>
+
+            <!-- Main Watch Action Button -->
+            <button
+              id="watch-btn"
+              class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm shadow-md transition-all active:scale-95 cursor-pointer shrink-0"
+            >
+              ▶ 立即观看
+            </button>
+          </div>
+
+          <!-- Section VI: Subtle Prompt Below Watch Button -->
+          <div class="pt-2 border-t border-slate-800/80">
+            <div class="text-xs text-slate-400 flex items-center gap-2">
+              <span>播放异常？</span>
+              <button
+                type="button"
+                id="toggle-playback-troubleshoot"
+                class="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-2 cursor-pointer transition-colors"
+              >
+                查看播放问题解决方法
+              </button>
+            </div>
+
+            <!-- Expandable Troubleshooting Box (Section VI) -->
+            <div
+              id="playback-troubleshoot-box"
+              class="hidden mt-4 p-5 rounded-xl bg-slate-900/90 border border-amber-500/25 space-y-4 transition-all"
+            >
+              <div class="text-xs font-bold text-amber-300 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                播放排障自查指南
+              </div>
+
+              <div class="text-xs text-slate-300 space-y-1">
+                <p class="font-medium text-white">如果出现以下情况：</p>
+                <div class="flex flex-wrap gap-2 text-slate-400 pt-1">
+                  <span class="px-2 py-0.5 rounded bg-slate-800">视频无法加载</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-800">页面一直转圈</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-800">图片不显示</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-800">播放中断</span>
+                  <span class="px-2 py-0.5 rounded bg-slate-800">连接超时</span>
+                </div>
+              </div>
+
+              <div class="text-xs text-slate-300 space-y-1.5 border-t border-slate-800 pt-3">
+                <p class="font-bold text-white">请首先：</p>
+                <ol class="list-decimal list-inside space-y-1 text-slate-300 pl-1">
+                  <li>刷新当前页面</li>
+                  <li>切换 Wi-Fi / 移动网络</li>
+                  <li>清除浏览器缓存</li>
+                  <li>更换浏览器（推荐最新 Chrome 或 Edge）</li>
+                  <li>检查 DNS 及当前网络</li>
+                </ol>
+              </div>
+
+              <!-- Conversion Recommendation -->
+              <div class="p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs space-y-2.5">
+                <p class="text-slate-200">
+                  <span class="text-amber-400 font-bold">仍然无法解决：</span> 可以尝试使用光速云改善当前网络连接。
+                </p>
+                <div>
+                  <a
+                    href={SITE_CONFIG.guangsuCloudUrl}
+                    target={SITE_CONFIG.externalLinkAttrs.target}
+                    rel={SITE_CONFIG.externalLinkAttrs.rel}
+                    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    使用光速云
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Drama Information & Episode Selector -->
+      <div class="lg:col-span-4 space-y-6">
+        <!-- Episode Selector -->
+        <div class="cinema-glass rounded-2xl p-5 border border-white/5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white">剧集列表</h3>
+            <span class="text-xs text-slate-400">更新至 {drama.episodes} 集全</span>
+          </div>
+
+          <div class="grid grid-cols-5 gap-2 max-h-56 overflow-y-auto pr-1">
+            {episodeList.map((ep) => (
+              <button
+                type="button"
+                class={`py-2 rounded-lg text-xs font-semibold transition-colors ${
+                  ep === 1
+                    ? 'bg-amber-500 text-slate-950 font-bold'
+                    : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-white'
+                }`}
+              >
+                {ep}
+              </button>
+            ))}
+          </div>
+          {drama.episodes > 40 && (
+            <div class="text-center text-xs text-slate-400 pt-2 border-t border-slate-800">
+              还有 {drama.episodes - 40} 集，请在客户端完整观看
+            </div>
+          )}
+        </div>
+
+        <!-- Synopsis & AI Specs -->
+        <div class="cinema-glass rounded-2xl p-5 border border-white/5 space-y-3">
+          <h3 class="text-sm font-bold text-white">剧情梗概</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            {drama.description}
+          </p>
+
+          {drama.aiTech && (
+            <div class="pt-3 border-t border-slate-800 space-y-1.5">
+              <span class="text-xs font-bold text-amber-400">AIGC 制作技术栈：</span>
+              <p class="text-xs font-mono text-slate-300 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
+                {drama.aiTech}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- Reusable Component: NetworkHelpCard (Occurring only once here, respecting max 2 rule) -->
+    <NetworkHelpCard
+      title="视频播放不顺畅或加载缓慢？"
+      subtitle="短剧切片流需要持续稳定的高带宽支持。若遇到频繁缓冲、连接超时或无法播放，先自查网络，可搭配光速云专线优化连接。"
+    />
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('toggle-playback-troubleshoot');
+    const box = document.getElementById('playback-troubleshoot-box');
+    if (toggleBtn && box) {
+      toggleBtn.addEventListener('click', () => {
+        box.classList.toggle('hidden');
+      });
+    }
+
+    const mainPlayBtn = document.getElementById('main-play-btn');
+    const watchBtn = document.getElementById('watch-btn');
+    const triggerPlay = () => {
+      alert('正为您加载第 1 集全高清分片流... 如遇缓冲延迟请检查本地网络环境。');
+    };
+    if (mainPlayBtn) mainPlayBtn.addEventListener('click', triggerPlay);
+    if (watchBtn) watchBtn.addEventListener('click', triggerPlay);
+  </script>
+</BaseLayout>

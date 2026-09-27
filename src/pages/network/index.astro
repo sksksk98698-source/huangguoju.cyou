@@ -1,0 +1,290 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NetworkHelpCard from '../../components/NetworkHelpCard.astro';
+import { SITE_CONFIG } from '../../lib/constants';
+
+const diagnosisProblems = [
+  {
+    id: 'cant-open',
+    name: '页面打不开',
+    icon: '🌐',
+    desc: '黄果短剧网站白屏、加载超时或ERR_CONNECTION_REFUSED',
+    normalFix: [
+      '刷新页面或按下 Ctrl+F5 强制刷新跳过缓存',
+      '尝试开启浏览器的隐私无痕模式排查扩展冲突',
+      '检查本地网络连接，尝试重启路由器或切换手机热点',
+      '排查是否开启了过于严格的广告过滤插件'
+    ],
+    relatedTutorial: '/tutorials/huangguoju-cant-open/'
+  },
+  {
+    id: 'video-lag',
+    name: '视频加载慢',
+    icon: '⏳',
+    desc: '播放界面一直转圈、频繁卡顿缓冲或自动降码率',
+    normalFix: [
+      '拖动进度条前后2秒强制重绘视频切片关键帧',
+      '将播放清晰度调整为1080P或超清以降低瞬时突发带宽需求',
+      '关闭电脑/手机后台的P2P下载软件与多余视频流任务',
+      '在浏览器设置中确认开启“硬件加速”'
+    ],
+    relatedTutorial: '/tutorials/video-buffering-stuck/'
+  },
+  {
+    id: 'app-cant-connect',
+    name: 'APP无法连接',
+    icon: '📱',
+    desc: '黄果短剧客户端提示“网络连接异常[-1009]”或无内容',
+    normalFix: [
+      '检查 iOS/Android 系统权限是否开放了“无线局域网与蜂窝数据”',
+      '在手机设置中开启飞行模式5秒后关闭，重置无线基站握手',
+      '检查手机是否配置了错误的全局HTTP代理或VPN描述文件',
+      '卸载老旧测试版并前往官网重新下载最新客户端'
+    ],
+    relatedTutorial: '/tutorials/app-connection-failed/'
+  },
+  {
+    id: 'ai-tools-fail',
+    name: 'AI工具打不开',
+    icon: '⚡',
+    desc: 'ChatGPT / Claude / Sora 提示 Region Not Supported 或超时',
+    normalFix: [
+      '海外AI工具部署了严格的地理防火墙与机房IP过滤',
+      '避免使用被污染的公共代理IP或免费共享节点',
+      '清除浏览器全部账号Cookie并检查系统时区设置',
+      '必须使用高纯净专线与原生支持地区节点建立连接'
+    ],
+    relatedTutorial: '/tutorials/region-not-supported/'
+  },
+  {
+    id: 'images-fail',
+    name: '图片加载失败',
+    icon: '🖼️',
+    desc: '短剧封面海报裂开、灰色占位方块或图标无法显示',
+    normalFix: [
+      '进入浏览器设置清除“缓存的图像和文件”',
+      '检查本地DNS是否被电信/联通劫持，更换为 223.5.5.5 或 119.29.29.29',
+      '检查浏览器扩展是否误屏蔽了静态资源CDN的跨域加载'
+    ],
+    relatedTutorial: '/tutorials/images-not-loading/'
+  }
+];
+
+const categoryList = [
+  { name: '黄果短剧打不开', href: '/tutorials/huangguoju-cant-open/' },
+  { name: '黄果短剧加载失败', href: '/tutorials/video-load-failed/' },
+  { name: '黄果短剧视频卡顿', href: '/tutorials/playback-lag-solution/' },
+  { name: '黄果短剧下载失败', href: '/tutorials/app-connection-failed/' },
+  { name: '图片无法加载', href: '/tutorials/images-not-loading/' },
+  { name: '播放连接超时', href: '/tutorials/connection-timeout-solution/' },
+  { name: 'DNS问题排查', href: '/tutorials/huangguoju-cant-open/#dns' },
+  { name: '浏览器兼容问题', href: '/tutorials/desktop-guide/' },
+  { name: '手机网络问题', href: '/tutorials/mobile-guide/' },
+  { name: '电脑网络问题', href: '/tutorials/desktop-guide/' },
+  { name: 'AI工具打不开', href: '/tutorials/ai-drama-generator-cant-open/' },
+  { name: 'AI视频工具连接失败', href: '/tutorials/ai-video-sites-not-loading/' },
+  { name: 'Region Not Supported', href: '/tutorials/region-not-supported/' },
+  { name: 'Connection Timeout', href: '/tutorials/connection-timeout-solution/' },
+  { name: 'Network Error 处理', href: '/tutorials/ai-tools-network-error/' }
+];
+
+const breadcrumbs = [
+  { name: '首页', url: '/' },
+  { name: '网络诊断中心', url: '/network/' },
+];
+
+const networkSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: '黄果短剧网络诊断中心',
+  headline: '黄果短剧打不开怎么办？视频加载失败与AI工具网络问题解决方法',
+  description: '提供黄果短剧打不开、加载失败、视频卡顿、APP无法连接以及ChatGPT/Claude/Sora等AI工具网络排查方案。',
+  url: `${SITE_CONFIG.url}/network/`,
+};
+---
+
+<BaseLayout
+  title="黄果短剧打不开怎么办？视频加载失败与AI工具网络问题解决方法"
+  description="黄果短剧网络诊断中心：提供黄果短剧打不开、加载失败、视频卡顿、APP无法连接以及ChatGPT/Claude/Sora等AI工具Region Not Supported与网络超时的全套排查方案。"
+  breadcrumbs={breadcrumbs}
+  schema={[networkSchema]}
+  isNetworkContext={true}
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+    <!-- Header -->
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold mb-3">
+        DIAGNOSTIC CENTER
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+        黄果短剧网络诊断中心
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+        针对黄果短剧在线播放异常、视频切片加载超时以及海外AI创作工具连接错误的一站式智能诊断与排障指引。
+      </p>
+    </div>
+
+    <!-- Section IX: Interactive Diagnostic Wizard -->
+    <div class="cinema-glass rounded-3xl p-6 md:p-10 border border-amber-500/30 mb-16 shadow-2xl">
+      <div class="text-center mb-8">
+        <h2 class="text-xl md:text-2xl font-black text-white">
+          你遇到了什么问题？
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          点击选择你当前遇到的故障现象，查看即时排障方案
+        </p>
+      </div>
+
+      <!-- Problem selector tabs -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
+        {diagnosisProblems.map((prob, index) => (
+          <button
+            type="button"
+            data-problem-id={prob.id}
+            class={`problem-tab p-3.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center gap-2 ${
+              index === 0
+                ? 'bg-amber-500/20 border-amber-500 text-amber-300 font-bold shadow-md shadow-amber-500/10'
+                : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white'
+            }`}
+          >
+            <span class="text-2xl">{prob.icon}</span>
+            <span class="text-xs sm:text-sm">{prob.name}</span>
+          </button>
+        ))}
+      </div>
+
+      <!-- Problem Content Panels -->
+      <div class="space-y-6">
+        {diagnosisProblems.map((prob, index) => (
+          <div
+            id={`panel-${prob.id}`}
+            class={`problem-panel space-y-6 ${index === 0 ? '' : 'hidden'}`}
+          >
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
+              <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <span>{prob.icon}</span>
+                  <span>现象描述：{prob.name}</span>
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">{prob.desc}</p>
+              </div>
+              <a
+                href={prob.relatedTutorial}
+                class="hidden sm:inline-flex text-xs text-amber-400 hover:text-amber-300 items-center gap-1 font-semibold"
+              >
+                查看专属教程 &rarr;
+              </a>
+            </div>
+
+            <!-- Normal Troubleshooting Steps (Section IX requirement) -->
+            <div class="space-y-3">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                1. 推荐排障方案（本地优先自查）：
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {prob.normalFix.map((fix, fIndex) => (
+                  <div class="p-3 rounded-lg bg-slate-800/60 border border-slate-700/60 text-xs text-slate-300 flex items-start gap-2">
+                    <span class="text-amber-400 font-mono font-bold">{fIndex + 1}.</span>
+                    <span>{fix}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <!-- Section IX: If not solved, show "可能与当前网络线路有关" then CTA 【尝试光速云】 -->
+            <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-900 to-amber-500/10 border border-amber-500/30 space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                <span class="text-sm font-bold text-amber-300">
+                  如果以上方法依然无法解决：
+                </span>
+              </div>
+
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                此时问题<span class="text-amber-400 font-bold">可能与当前网络线路有关</span>（如运营商国际骨干网高阻断、跨网互联抖动或目标服务机房风控屏蔽）。
+              </p>
+
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-1">
+                <div class="text-xs text-slate-400">
+                  建议搭配专业网络优化方案，更换优质直连专线通道。
+                </div>
+
+                <a
+                  href={SITE_CONFIG.guangsuCloudUrl}
+                  target={SITE_CONFIG.externalLinkAttrs.target}
+                  rel={SITE_CONFIG.externalLinkAttrs.rel}
+                  class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm shadow-md transition-all active:scale-95 cursor-pointer"
+                >
+                  <svg class="w-4 h-4 text-slate-950" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  尝试光速云
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Section IX: Categorized Knowledge Base Links -->
+    <div class="space-y-6 mb-16">
+      <div class="text-center sm:text-left">
+        <h2 class="text-xl md:text-2xl font-black text-white">
+          网络与故障分类知识库
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          覆盖全部黄果短剧与AI生产力工具的常见故障与解决方案
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {categoryList.map((cat) => (
+          <a
+            href={cat.href}
+            class="cinema-glass p-3.5 rounded-xl border border-white/5 hover:border-amber-500/30 text-xs text-slate-300 hover:text-amber-400 transition-colors flex items-center justify-between group"
+          >
+            <span class="truncate">{cat.name}</span>
+            <span class="text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all text-xs">&rarr;</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Reusable Component: NetworkHelpCard -->
+    <NetworkHelpCard
+      title="网络环境快速改善建议"
+      subtitle="光速云采用高规格IEPL内网专线与先进加密协议，无缝解决视频转圈与AI工具连接中断问题。"
+    />
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.problem-tab');
+    const panels = document.querySelectorAll('.problem-panel');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-problem-id');
+        
+        // Reset all tabs
+        tabs.forEach((t) => {
+          t.classList.remove('bg-amber-500/20', 'border-amber-500', 'text-amber-300', 'font-bold', 'shadow-md', 'shadow-amber-500/10');
+          t.classList.add('bg-slate-900/60', 'border-slate-800', 'text-slate-300');
+        });
+
+        // Activate clicked tab
+        tab.classList.remove('bg-slate-900/60', 'border-slate-800', 'text-slate-300');
+        tab.classList.add('bg-amber-500/20', 'border-amber-500', 'text-amber-300', 'font-bold', 'shadow-md', 'shadow-amber-500/10');
+
+        // Toggle panels
+        panels.forEach((p) => {
+          if (p.id === `panel-${targetId}`) {
+            p.classList.remove('hidden');
+          } else {
+            p.classList.add('hidden');
+          }
+        });
+      });
+    });
+  </script>
+</BaseLayout>

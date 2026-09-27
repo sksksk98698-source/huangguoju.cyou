@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="页面未找到 (404)"
+  description="抱歉，您访问的页面不存在、已被移动或地址输入有误。您可以返回黄果短剧首页或访问网络诊断中心与短剧片库。"
+  robots="noindex, follow"
+  showFooterNetworkNotice={false}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 text-center">
+    <div class="cinema-glass rounded-3xl p-8 md:p-14 border border-amber-500/20 relative overflow-hidden shadow-2xl">
+      <!-- Glow background -->
+      <div class="absolute -top-24 -left-24 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-orange-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono font-semibold">
+          HTTP STATUS 404 · NOT FOUND
+        </div>
+
+        <h1 class="text-6xl sm:text-8xl font-black tracking-tight text-white gold-gradient-text">
+          404
+        </h1>
+
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-100">
+          抱歉，该短剧或页面未找到
+        </h2>
+
+        <p class="text-slate-400 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+          您所请求的页面可能已下线、更名，或输入的 URL 地址存在笔误。请检查链接或通过以下快速通道继续探索：
+        </p>
+
+        <!-- Quick Access Navigation -->
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+          <a
+            href="/"
+            class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition-all"
+          >
+            返回平台首页
+          </a>
+
+          <a
+            href="/drama/"
+            class="px-6 py-3 rounded-xl cinema-glass text-slate-200 hover:text-white hover:border-slate-600 text-sm font-medium transition-colors"
+          >
+            浏览热门短剧
+          </a>
+
+          <a
+            href="/network/"
+            class="px-6 py-3 rounded-xl cinema-glass text-slate-200 hover:text-white hover:border-slate-600 text-sm font-medium transition-colors"
+          >
+            网络排障中心
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
